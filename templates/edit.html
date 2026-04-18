@@ -1,0 +1,19 @@
+<form method="POST">
+
+    <input name="name" value="{{ renter[1] }}" required><br><br>
+
+    <input name="phone" value="{{ renter[2] }}" required><br><br>
+
+    <input name="address" value="{{ renter[3] }}" required><br><br>
+
+    <input name="barrow" value="{{ renter[4] }}" required><br><br>
+
+    <select name="paid">
+        <option value="Paid" {% if renter[6] == "Paid" %}selected{% endif %}>Paid</option>
+        <option value="Not Paid" {% if renter[6] == "Not Paid" %}selected{% endif %}>Not Paid</option>
+    </select>
+
+    <br><br>
+    <button type="submit">Update</button>
+
+</form>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Renter Profile</title>
+</head>
+<body style="font-family:Arial; background:#f4f6f9;">
+
+<h2 style="text-align:center;">👤 Renter Profile</h2>
+
+<div style="background:white; margin:20px; padding:20px; border-radius:10px;">
+
+    <h3>{{ renter[1] }}</h3>
+
+    <p>📞 {{ renter[2] }}</p>
+    <p>📍 {{ renter[3] }}</p>
+    <p>📦 {{ renter[4] }}</p>
+    <p>📅 Start: {{ renter[5] }}</p>
+
+</div>
+
+<div style="text-align:center;">
+    <a href="/renters">⬅ Back to Renters</a>
+    <div style="margin-top:15px;">
+
+    <a href="/edit/{{ renter[0] }}" 
+       style="background:orange; color:white; padding:8px 10px; border-radius:6px; text-decoration:none;">
+       ✏️ Edit
+    </a>
+
+    <a href="/delete/{{ renter[0] }}" 
+       style="background:red; color:white; padding:8px 10px; border-radius:6px; text-decoration:none;"
+       onclick="return confirm('Are you sure?')">
+       🗑 Delete
+    </a>
+
+    <a href="/pay/{{ renter[0] }}" 
+       style="background:#1f4fff; color:white; padding:8px 10px; border-radius:6px; text-decoration:none;">
+       💰 Add Payment
+    </a>
+
+    <a href="/history/{{ renter[0] }}" 
+       style="background:green; color:white; padding:8px 10px; border-radius:6px; text-decoration:none;">
+       📜 History
+    </a>
+
+</div>
+</div>
+
+</body>
+</html>

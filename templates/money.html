@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Money Dashboard</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f9;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1f4fff, #0d2db3);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        /* CONTAINER */
+        .container {
+            padding: 15px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .label {
+            font-size: 13px;
+            color: #777;
+            margin-top: 6px;
+        }
+
+        /* COLORS */
+        .blue { color: #1f4fff; }
+        .green { color: #27ae60; }
+        .red { color: #e74c3c; }
+        .dark { color: #2c3e50; }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>💰 Money Dashboard</h2>
+</div>
+
+<div class="container">
+
+    <div class="grid">
+
+        <div class="card">
+            <h2 class="dark">{{ total_renters }}</h2>
+            <div class="label">Total Renters</div>
+        </div>
+
+        <div class="card">
+            <h2 class="green">{{ paid_renters }}</h2>
+            <div class="label">Paid Renters</div>
+        </div>
+
+        <div class="card">
+            <h2 class="red">{{ unpaid_renters }}</h2>
+            <div class="label">Unpaid Renters</div>
+        </div>
+
+        <div class="card">
+            <h2 class="blue">{{ weekly_fee }} CFA</h2>
+            <div class="label">Weekly Fee</div>
+        </div>
+
+        <div class="card">
+            <h2 class="green">{{ collected_money }} CFA</h2>
+            <div class="label">Collected Money</div>
+        </div>
+
+        <div class="card">
+            <h2 class="blue">{{ expected_money }} CFA</h2>
+            <div class="label">Expected Money</div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

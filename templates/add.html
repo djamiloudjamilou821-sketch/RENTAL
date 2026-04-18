@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Renter</title>
+</head>
+
+<div style="display:flex; justify-content:center; gap:15px; background:#1f4fff; padding:10px;">
+
+    <a href="/" style="color:white; text-decoration:none; text-align:center;">
+        🏠<br><small>Dashboard</small>
+    </a>
+
+    <a href="/renters" style="color:white; text-decoration:none; text-align:center;">
+        👥<br><small>Renters</small>
+    </a>
+
+    <a href="/add" style="color:white; text-decoration:none; text-align:center;">
+        ➕<br><small>Add</small>
+    </a>
+
+</div>
+<body style="font-family:Arial; background:#f4f6f9; margin:0;">
+
+<div style="background:#1f4fff; color:white; padding:15px; text-align:center;">
+    <h2>Add New Renter</h2>
+</div>
+
+<div style="padding:20px; max-width:500px; margin:auto;">
+
+    <form method="POST" style="background:white; padding:15px; border-radius:10px;">
+
+        <input name="name" placeholder="Name" style="width:100%; padding:10px; margin:5px 0;"><br>
+        <input name="phone" placeholder="Phone" style="width:100%; padding:10px; margin:5px 0;"><br>
+        <input name="address" placeholder="Address" style="width:100%; padding:10px; margin:5px 0;"><br>
+        <input name="barrow" placeholder="Item" style="width:100%; padding:10px; margin:5px 0;"><br>
+
+        <select name="paid" style="width:100%; padding:10px; margin:5px 0;">
+            <option>Not Paid</option>
+            <option>Paid</option>
+        </select>
+
+        <button type="submit" style="width:100%; padding:10px; background:#1f4fff; color:white; border:none; margin-top:10px;">
+            Save Renter
+        </button>
+
+    </form>
+
+    <br>
+    <a href="/" style="text-decoration:none;">⬅ Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>
