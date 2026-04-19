@@ -20,7 +20,8 @@ def init_db():
             barrow TEXT,
             start_date TEXT,
             due_date TEXT,
-            paid TEXT
+            paid TEXT,
+            last_payment_date TEXT   
         )
     """)
 
@@ -91,34 +92,33 @@ def home():
     if "user" not in session:
         return redirect("/login")
     return render_template("home.html")
-
-# ================= DASHBOARD =================
+# ================== DASHBOARD ===========
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-
     search = request.args.get("search")
     filter_status = request.args.get("filter")
 
-    query = "SELECT * FROM renters"
-    params = []
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
 
+    # 🔍 SEARCH FIX
     if search:
-        query += " WHERE name LIKE ? OR phone LIKE ? OR address LIKE ?"
-        params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
+        c.execute("""
+            SELECT * FROM renters
+            WHERE name LIKE ? OR phone LIKE ? OR address LIKE ?
+        """, (f"%{search}%", f"%{search}%", f"%{search}%"))
+    else:
+        c.execute("SELECT * FROM renters")
 
-    c.execute(query, params)
     renters = c.fetchall()
     conn.close()
 
     updated_renters = []
     today = datetime.now().date()
 
-    total = len(renters)
     paid_count = 0
     overdue_count = 0
     not_paid_count = 0
@@ -130,28 +130,48 @@ def dashboard():
         weeks_passed = days_passed // 7
 
         current_due = start_date + timedelta(days=(weeks_passed + 1) * 7)
-        days_left = (current_due - today).days
 
-        if r[7] == "Paid":
+        # 💳 last payment from DB
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+
+        c.execute("""
+            SELECT payment_date FROM payments
+            WHERE renter_id=?
+            ORDER BY payment_date DESC LIMIT 1
+        """, (r[0],))
+
+        last = c.fetchone()
+        conn.close()
+
+        last_payment_date = None
+        if last:
+            last_payment_date = datetime.strptime(last[0], "%Y-%m-%d").date()
+
+        cycle_start = current_due - timedelta(days=7)
+
+        # 🧠 STATUS LOGIC
+        if last_payment_date and cycle_start <= last_payment_date <= current_due:
             status = "Paid"
             paid_count += 1
 
-        elif days_left < 0:
-            status = f"LATE by {abs(days_left)} days"
+        elif today > current_due:
+            status = f"LATE by {(today - current_due).days} days"
             overdue_count += 1
 
-        elif days_left == 0:
+        elif today == current_due:
             status = "DUE TODAY"
             not_paid_count += 1
 
         else:
-            status = f"Due in {days_left} days"
+            status = f"Due in {(current_due - today).days} days"
             not_paid_count += 1
 
+        # 🔍 FILTER FIX
         if filter_status:
             if filter_status == "paid" and status != "Paid":
                 continue
-            if filter_status == "notpaid" and r[7] == "Paid":
+            if filter_status == "notpaid" and status == "Paid":
                 continue
             if filter_status == "overdue" and "LATE" not in status:
                 continue
@@ -161,12 +181,11 @@ def dashboard():
     return render_template(
         "index.html",
         renters=updated_renters,
-        total=total,
+        total=len(renters),
         paid=paid_count,
         overdue=overdue_count,
         not_paid=not_paid_count
     )
-
 # ================= ADD =================
 @app.route("/add", methods=["GET", "POST"])
 def add():
@@ -178,22 +197,26 @@ def add():
         phone = request.form["phone"]
         address = request.form["address"]
         barrow = request.form["barrow"]
-        paid = request.form["paid"]
 
-        start_date = datetime.now()
-        due_date = start_date + timedelta(days=7)
+        # ✅ define start here
+        start = datetime.now()
+        due = start + timedelta(days=7)
 
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
 
         c.execute("""
-            INSERT INTO renters (name, phone, address, barrow, start_date, due_date, paid)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO renters (name, phone, address, barrow, start_date, due_date, paid, last_payment_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
-            name, phone, address, barrow,
-            start_date.strftime("%Y-%m-%d"),
-            due_date.strftime("%Y-%m-%d"),
-            paid
+            name,
+            phone,
+            address,
+            barrow,
+            start.strftime("%Y-%m-%d"),
+            due.strftime("%Y-%m-%d"),
+            None,
+            None
         ))
 
         conn.commit()
@@ -217,13 +240,12 @@ def edit(id):
         phone = request.form["phone"]
         address = request.form["address"]
         barrow = request.form["barrow"]
-        paid = request.form["paid"]
 
         c.execute("""
             UPDATE renters
-            SET name=?, phone=?, address=?, barrow=?, paid=?
+            SET name=?, phone=?, address=?, barrow=?
             WHERE id=?
-        """, (name, phone, address, barrow, paid, id))
+        """, (name, phone, address, barrow, id))
 
         conn.commit()
         conn.close()
@@ -262,10 +284,34 @@ def renters_page():
 
     c.execute("SELECT * FROM renters")
     renters = c.fetchall()
-
     conn.close()
 
-    return render_template("renters.html", renters=renters)
+    updated = []
+    today = datetime.now().date()
+
+    for r in renters:
+        start_date = datetime.strptime(r[5], "%Y-%m-%d").date()
+
+        days_passed = (today - start_date).days
+        weeks_passed = days_passed // 7
+
+        current_due = start_date + timedelta(days=(weeks_passed + 1) * 7)
+
+        last_payment_date = r[8]
+
+        if last_payment_date:
+            last_payment_date = datetime.strptime(last_payment_date, "%Y-%m-%d").date()
+
+        if last_payment_date and last_payment_date >= current_due - timedelta(days=7):
+            status = "Paid"
+        elif today > current_due:
+            status = "LATE"
+        else:
+            status = "Pending"
+
+        updated.append(r + (status,))
+
+    return render_template("renters.html", renters=updated)
 # ============ PROFILE ==================
 @app.route("/renter/<int:id>")
 def renter_profile(id):
@@ -275,12 +321,38 @@ def renter_profile(id):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
+    # 👤 renter info
     c.execute("SELECT * FROM renters WHERE id=?", (id,))
     renter = c.fetchone()
 
+    # 💳 payment history
+    c.execute("""
+        SELECT amount, payment_date
+        FROM payments
+        WHERE renter_id=?
+        ORDER BY payment_date DESC
+    """, (id,))
+    payments = c.fetchall()
+
+    # 📊 total paid
+    total_paid = sum([int(p[0]) for p in payments]) if payments else 0
+
+    # 🔢 number of payments
+    total_payments = len(payments)
+
+    # 🕓 last payment
+    last_payment = payments[0][1] if payments else None
+
     conn.close()
 
-    return render_template("renter.html", renter=renter)    
+    return render_template(
+        "renter.html",
+        renter=renter,
+        payments=payments,
+        total_paid=total_paid,
+        total_payments=total_payments,
+        last_payment=last_payment
+    )  
 # ================= PAYMENT =================
 @app.route("/pay/<int:id>", methods=["GET", "POST"])
 def pay(id):
@@ -294,20 +366,26 @@ def pay(id):
         amount = request.form["amount"]
         payment_date = datetime.now().strftime("%Y-%m-%d")
 
+        # 💳 save payment history
         c.execute("""
             INSERT INTO payments (renter_id, amount, payment_date)
             VALUES (?, ?, ?)
         """, (id, amount, payment_date))
 
-        c.execute("UPDATE renters SET paid='Paid' WHERE id=?", (id,))
+        # 🔥 update ONLY last payment date (truth source)
+        c.execute("""
+            UPDATE renters
+            SET last_payment_date=?
+            WHERE id=?
+        """, (payment_date, id))
 
         conn.commit()
         conn.close()
+
         return redirect("/dashboard")
 
     conn.close()
     return render_template("pay.html", renter_id=id)
-
 # ================= MONEY =================
 @app.route("/money")
 def money():
@@ -317,18 +395,82 @@ def money():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
+    # 👥 renters
     c.execute("SELECT * FROM renters")
     renters = c.fetchall()
-    conn.close()
 
     total_renters = len(renters)
+
+    # 💳 payments
+    c.execute("SELECT renter_id, amount, payment_date FROM payments")
+    payments = c.fetchall()
+
+    today = datetime.now().date()
+
+    paid_renters = 0
+    overdue_renters = 0
+
     weekly_fee = 1000
 
-    paid_renters = len([r for r in renters if r[7] == "Paid"])
+    # 🔥 loop renters for real status
+    for r in renters:
+        start_date = datetime.strptime(r[5], "%Y-%m-%d").date()
+
+        days_passed = (today - start_date).days
+        weeks_passed = days_passed // 7
+
+        current_due = start_date + timedelta(days=(weeks_passed + 1) * 7)
+
+        # get last payment for this renter
+        c.execute("""
+            SELECT payment_date FROM payments
+            WHERE renter_id=?
+            ORDER BY payment_date DESC LIMIT 1
+        """, (r[0],))
+        last = c.fetchone()
+
+        last_payment_date = None
+        if last:
+            last_payment_date = datetime.strptime(last[0], "%Y-%m-%d").date()
+
+        if last_payment_date and last_payment_date >= current_due - timedelta(days=7):
+            paid_renters += 1
+        elif today > current_due:
+            overdue_renters += 1
+
     unpaid_renters = total_renters - paid_renters
 
+    # 💰 collected money = 
+    collected_money = 0
+
+    for r in renters:
+        start_date = datetime.strptime(r[5], "%Y-%m-%d").date()
+
+        days_passed = (today - start_date).days
+        weeks_passed = days_passed // 7
+
+        current_due = start_date + timedelta(days=(weeks_passed + 1) * 7)
+        cycle_start = current_due - timedelta(days=7)
+
+        # get last payment
+        c.execute("""
+            SELECT amount, payment_date FROM payments
+            WHERE renter_id=?
+            ORDER BY payment_date DESC LIMIT 1
+        """, (r[0],))
+        last = c.fetchone()
+
+        if last:
+            payment_amount = int(last[0])
+            payment_date = datetime.strptime(last[1], "%Y-%m-%d").date()
+
+            # only count if payment is in THIS WEEK
+            if cycle_start <= payment_date <= current_due:
+                collected_money += payment_amount
+
     expected_money = total_renters * weekly_fee
-    collected_money = paid_renters * weekly_fee
+
+    conn.close()
 
     return render_template(
         "money.html",
@@ -339,7 +481,6 @@ def money():
         expected_money=expected_money,
         collected_money=collected_money
     )
-
 # ================= VERIFY USER (STEP 1) =================
 @app.route("/verify-user", methods=["GET", "POST"])
 def verify_user():

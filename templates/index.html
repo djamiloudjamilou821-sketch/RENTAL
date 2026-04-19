@@ -168,26 +168,25 @@ body {
     <div class="info">📞 {{ r[2] }}</div>
     <div class="info">📍 {{ r[3] }}</div>
 
-    <div class="info">⏳ Next Due: {{ r[8] }}</div>
+    <div class="info">
+        ⏳ Next Due: <strong>{{ r[9] }}</strong>
+    </div>
 
     <div class="info">
-        {% if "LATE" in r[9] %}
-            <span class="late">🔴 {{ r[9] }}</span>
-
-        {% elif r[9] == "DUE TODAY" %}
-            <span class="due">🟠 {{ r[9] }}</span>
-
-        {% elif r[9] == "Paid" %}
-            <span class="paid">🟢 Paid</span>
-
+        Status:
+        {% if "Paid" in r[10] %}
+            <span style="color:green; font-weight:bold;">✔ Paid</span>
+        {% elif "LATE" in r[10] %}
+            <span style="color:red; font-weight:bold;">❌ {{ r[10] }}</span>
+        {% elif "DUE TODAY" in r[10] %}
+            <span style="color:orange; font-weight:bold;">⚠ Due Today</span>
         {% else %}
-            <span>{{ r[9] }}</span>
+            <span style="color:blue; font-weight:bold;">⏳ {{ r[10] }}</span>
         {% endif %}
     </div>
 
 </div>
 {% endfor %}
-
 <!-- FLOAT ADD BUTTON -->
 <a href="/add" class="add-btn">+</a>
 

@@ -2,128 +2,99 @@
 <html>
 <head>
     <title>Money Dashboard</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f4f6f9;
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 20px;
         }
 
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, #1f4fff, #0d2db3);
-            color: white;
-            padding: 25px;
+        h2 {
             text-align: center;
-            border-bottom-left-radius: 25px;
-            border-bottom-right-radius: 25px;
         }
 
-        .header h2 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        /* CONTAINER */
-        .container {
-            padding: 15px;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        /* GRID */
-        .grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 15px;
             margin-top: 20px;
         }
 
-        /* CARD */
         .card {
             background: white;
-            padding: 18px;
-            border-radius: 14px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            transition: 0.2s ease;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .card:hover {
-            transform: translateY(-4px);
+        .green { color: green; }
+        .red { color: red; }
+        .blue { color: blue; }
+        .orange { color: orange; }
+
+        .big {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-        .card h2 {
-            margin: 0;
-            font-size: 24px;
+        .back {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
         }
 
-        .label {
-            font-size: 13px;
-            color: #777;
-            margin-top: 6px;
-        }
-
-        /* COLORS */
-        .blue { color: #1f4fff; }
-        .green { color: #27ae60; }
-        .red { color: #e74c3c; }
-        .dark { color: #2c3e50; }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
+        .back a {
+            text-decoration: none;
+            padding: 10px 15px;
+            background: black;
+            color: white;
+            border-radius: 5px;
         }
     </style>
 </head>
-
 <body>
 
-<div class="header">
-    <h2>💰 Money Dashboard</h2>
-</div>
+<h2>💰 Money Dashboard</h2>
 
-<div class="container">
+<div class="stats">
 
-    <div class="grid">
-
-        <div class="card">
-            <h2 class="dark">{{ total_renters }}</h2>
-            <div class="label">Total Renters</div>
-        </div>
-
-        <div class="card">
-            <h2 class="green">{{ paid_renters }}</h2>
-            <div class="label">Paid Renters</div>
-        </div>
-
-        <div class="card">
-            <h2 class="red">{{ unpaid_renters }}</h2>
-            <div class="label">Unpaid Renters</div>
-        </div>
-
-        <div class="card">
-            <h2 class="blue">{{ weekly_fee }} CFA</h2>
-            <div class="label">Weekly Fee</div>
-        </div>
-
-        <div class="card">
-            <h2 class="green">{{ collected_money }} CFA</h2>
-            <div class="label">Collected Money</div>
-        </div>
-
-        <div class="card">
-            <h2 class="blue">{{ expected_money }} CFA</h2>
-            <div class="label">Expected Money</div>
-        </div>
-
+    <div class="card">
+        👥 Total Renters
+        <div class="big">{{ total_renters }}</div>
     </div>
 
+    <div class="card green">
+        ✔ Paid Renters
+        <div class="big">{{ paid_renters }}</div>
+    </div>
+
+    <div class="card red">
+        ❌ Unpaid Renters
+        <div class="big">{{ unpaid_renters }}</div>
+    </div>
+
+    <div class="card blue">
+        💵 Weekly Fee
+        <div class="big">{{ weekly_fee }} CFA</div>
+    </div>
+
+    <div class="card green">
+        💰 Collected Money
+        <div class="big">{{ collected_money }} CFA</div>
+    </div>
+
+    <div class="card orange">
+        📊 Expected Money
+        <div class="big">{{ expected_money }} CFA</div>
+    </div>
+
+</div>
+
+<div class="back">
+    <a href="/dashboard">⬅ Back to Dashboard</a>
 </div>
 
 </body>

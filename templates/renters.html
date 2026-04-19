@@ -86,15 +86,8 @@
         <td>{{ r[2] }}</td>
         <td>{{ r[3] }}</td>
 
-        <td>
-            {% if r[7] == "Paid" %}
-                <span style="color:green; font-weight:bold;">Paid</span>
-            {% else %}
-                <span style="color:red; font-weight:bold;">Not Paid</span>
-            {% endif %}
-        </td>
-
-        <td class="actions">
+        <td>{{ r[9] }}</td>
+                <td class="actions">
             <a href="/renter/{{ r[0] }}" class="view">View</a>
             <a href="/edit/{{ r[0] }}" class="edit">Edit</a>
             <a href="/delete/{{ r[0] }}" class="delete"

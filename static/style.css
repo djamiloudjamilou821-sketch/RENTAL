@@ -1,0 +1,176 @@
+/* =========================
+   🚀 SAAS RENTAL SYSTEM UI
+========================= */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+    color: #111;
+}
+
+/* =========================
+   NAVBAR (if you use it)
+========================= */
+.navbar {
+    background: #111827;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+    padding: 20px;
+}
+
+/* =========================
+   CARD SYSTEM (MAIN UI)
+========================= */
+.card {
+    background: white;
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
+    border-left: 5px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   STATUS COLORS
+========================= */
+.paid {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.late {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.pending {
+    color: #f59e0b;
+    font-weight: bold;
+}
+
+/* =========================
+   BUTTONS (SAAS STYLE)
+========================= */
+button, .btn {
+    background: #2563eb;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    background: #1d4ed8;
+}
+
+button:active, .btn:active {
+    transform: scale(0.96);
+}
+
+/* =========================
+   TABLE DESIGN
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+th {
+    background: #111827;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #f3f4f6;
+}
+
+/* =========================
+   DASHBOARD STATS
+========================= */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+.stat-box:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   INPUT FIELDS
+========================= */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+input:focus {
+    border-color: #2563eb;
+}
+
+/* =========================
+   SMALL ANIMATION (PAGE LOAD)
+========================= */
+body {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
