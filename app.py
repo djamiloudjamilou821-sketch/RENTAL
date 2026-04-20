@@ -538,7 +538,10 @@ def new_password():
         return "✅ Password changed successfully"
 
     return render_template("new_password.html")
-
+@app.route("/offline")
+def offline():
+    return render_template("offline.html")
+    
 # ================= RUN =================
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

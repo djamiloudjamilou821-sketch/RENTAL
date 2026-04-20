@@ -3,7 +3,8 @@
 <head>
     <title>Rental Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563eb">
 <style>
 body {
     margin: 0;
@@ -198,6 +199,10 @@ body {
     <a href="/money">💰<br>Money</a>
     <a href="/verify-user">🔐<br>Password</a>
 </div>
-
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/static/sw.js");
+}
+</script>
 </body>
 </html>
