@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm_delete</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="profile-container">
+    <h2>⚠ Delete Renter</h2>
+
+    <p>Enter admin password to confirm deletion</p>
+
+    <form method="POST">
+        <input type="password" name="password" placeholder="Admin password" required>
+        <button type="submit" style="background:red;color:white;">
+            Confirm Delete
+        </button>
+    </form>
+
+    <a href="/renters">Cancel</a>
+</div>
+</body>
+</html>

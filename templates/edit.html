@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User</title>
+     <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="profile-container">
 <form method="POST">
 
     <input name="name" value="{{ renter[1] }}" required><br><br>
@@ -10,5 +18,8 @@
 
     <br><br>
     <button type="submit">Update</button>
-
+    <input type="password" name="password" placeholder="Admin password" required>
 </form>
+</div>
+</body>
+</html>

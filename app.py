@@ -6,6 +6,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 app.secret_key = "secret123"
 
+WEEKLY_FEE = 1000
+
+ADMIN_PASSWORD = "1234"
+
+def check_admin_password(password):
+    return password == ADMIN_PASSWORD
 # ================= DATABASE =================
 def init_db():
     conn = sqlite3.connect("database.db")
@@ -236,6 +242,12 @@ def edit(id):
     c = conn.cursor()
 
     if request.method == "POST":
+
+        password = request.form.get("password")
+
+        if not check_admin_password(password):
+            return "❌ Wrong admin password"
+
         name = request.form["name"]
         phone = request.form["phone"]
         address = request.form["address"]
@@ -250,7 +262,6 @@ def edit(id):
         conn.commit()
         conn.close()
         return redirect("/dashboard")
-
     c.execute("SELECT * FROM renters WHERE id=?", (id,))
     renter = c.fetchone()
     conn.close()
@@ -258,7 +269,7 @@ def edit(id):
     return render_template("edit.html", renter=renter)
 
 # ================= DELETE =================
-@app.route("/delete/<int:id>")
+@app.route("/delete/<int:id>", methods=["GET", "POST"])
 def delete(id):
     if "user" not in session:
         return redirect("/login")
@@ -266,12 +277,22 @@ def delete(id):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
-    c.execute("DELETE FROM renters WHERE id=?", (id,))
+    if request.method == "POST":
 
-    conn.commit()
+        password = request.form.get("password")
+
+        if not check_admin_password(password):
+            conn.close()
+            return "❌ Wrong admin password"
+
+        c.execute("DELETE FROM renters WHERE id=?", (id,))
+        conn.commit()
+        conn.close()
+
+        return redirect("/renters")
+
     conn.close()
-
-    return redirect("/dashboard")
+    return render_template("confirm_delete.html", id=id)
 
 # ================= RENTERS =================
 @app.route("/renters")
@@ -363,7 +384,12 @@ def pay(id):
     c = conn.cursor()
 
     if request.method == "POST":
-        amount = request.form["amount"]
+        password = request.form.get("password")
+
+        if not check_admin_password(password):
+            return "❌ Wrong admin password"
+
+        amount = WEEKLY_FEE
         payment_date = datetime.now().strftime("%Y-%m-%d")
 
         # 💳 save payment history
@@ -538,10 +564,29 @@ def new_password():
         return "✅ Password changed successfully"
 
     return render_template("new_password.html")
+#================== OFFLINE =================
 @app.route("/offline")
 def offline():
     return render_template("offline.html")
-    
+#================ ADMIN PASSWORD =============
+@app.route("/change-admin-password", methods=["GET", "POST"])
+def change_admin_password():
+    if "user" not in session:
+        return redirect("/login")
+
+    global ADMIN_PASSWORD
+
+    if request.method == "POST":
+        old = request.form["old_password"]
+        new = request.form["new_password"]
+
+        if old != ADMIN_PASSWORD:
+            return "❌ Wrong current admin password"
+
+        ADMIN_PASSWORD = new
+        return "✅ Admin password changed successfully"
+
+    return render_template("change_admin_password.html")   
 # ================= RUN =================
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

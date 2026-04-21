@@ -2,15 +2,30 @@
 <html>
 <head>
     <title>Add Payment</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h2>Add Payment</h2>
+<div class="profile-container">
 
-<form method="POST">
-    <input type="text" name="amount" placeholder="Enter amount" required>
-    <button type="submit">Save Payment</button>
-</form>
+    <h2>Add Payment</h2>
+
+    <!-- SHOW FIXED AMOUNT -->
+    <p><strong>Amount:</strong> 1000 CFA</p>
+
+    <form method="POST">
+
+        <!-- ❌ removed manual input -->
+        <!-- ✅ hidden input so backend still works -->
+        <input type="hidden" name="amount" value="1000">
+
+        <input type="password" name="password" placeholder="Admin password" required>
+
+        <button type="submit">Save Payment</button>
+
+    </form>
+
+</div>
 
 </body>
 </html>
