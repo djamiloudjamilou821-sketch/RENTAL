@@ -10,18 +10,35 @@
 
     <h2>Add Payment</h2>
 
-    <!-- SHOW FIXED AMOUNT -->
+    <!-- FIXED AMOUNT -->
     <p><strong>Amount:</strong> 1000 CFA</p>
+
+    <!-- DEBT INFO -->
+    {% if debt > 0 %}
+        <p style="color:red;">
+            ❗ You still owe {{ debt }} CFA
+        </p>
+    {% else %}
+        <p style="color:green;">
+            ✔ No debt
+        </p>
+    {% endif %}
 
     <form method="POST">
 
-        <!-- ❌ removed manual input -->
-        <!-- ✅ hidden input so backend still works -->
         <input type="hidden" name="amount" value="1000">
 
         <input type="password" name="password" placeholder="Admin password" required>
 
-        <button type="submit">Save Payment</button>
+        {% if debt <= 0 and already_paid %}
+            <button style="background:gray; color:white; padding:10px; border:none; border-radius:5px;" disabled>
+                ✔ Already Paid This Week
+            </button>
+        {% else %}
+            <button type="submit" style="background:green; color:white; padding:10px; border:none; border-radius:5px;">
+                💳 Save Payment
+            </button>
+        {% endif %}
 
     </form>
 

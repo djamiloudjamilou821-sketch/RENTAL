@@ -380,25 +380,88 @@ def pay(id):
     if "user" not in session:
         return redirect("/login")
 
+    import sqlite3
+    from datetime import datetime, timedelta
+
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
+    # 🔹 Get renter
+    c.execute("SELECT * FROM renters WHERE id=?", (id,))
+    renter = c.fetchone()
+
+    if not renter:
+        conn.close()
+        return "Renter not found"
+
+    today = datetime.now().date()
+
+    # 🔹 Start date
+    start_date = datetime.strptime(renter[5], "%Y-%m-%d").date()
+
+    # 🔹 Weeks passed
+    weeks_passed = (today - start_date).days // 7
+
+    # 🔹 Get all payments
+    c.execute("SELECT amount, payment_date FROM payments WHERE renter_id=?", (id,))
+    payments = c.fetchall()
+
+    # 🔹 Total paid
+    total_paid = sum(int(p[0]) for p in payments) if payments else 0
+
+    # 🔹 Expected amount
+    expected = (weeks_passed + 1) * WEEKLY_FEE
+
+    # 🔹 Debt
+    debt = expected - total_paid
+
+    # 🔹 Current week range (Monday → Sunday)
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+
+    c.execute("""
+        SELECT * FROM payments
+        WHERE renter_id=? AND payment_date BETWEEN ? AND ?
+    """, (
+        id,
+        week_start.strftime("%Y-%m-%d"),
+        week_end.strftime("%Y-%m-%d")
+    ))
+
+    already_paid = c.fetchone()
+
+    # =========================
+    # 💳 HANDLE PAYMENT
+    # =========================
     if request.method == "POST":
+
+        # 🔐 Admin password
         password = request.form.get("password")
 
         if not check_admin_password(password):
+            conn.close()
             return "❌ Wrong admin password"
 
-        amount = WEEKLY_FEE
-        payment_date = datetime.now().strftime("%Y-%m-%d")
+        # 🚫 Block if NO debt and already paid this week
+        if debt <= 0 and already_paid:
+            conn.close()
+            return render_template(
+                "pay.html",
+                renter_id=id,
+                already_paid=True,
+                debt=debt
+            )
 
-        # 💳 save payment history
+        amount = WEEKLY_FEE
+        payment_date = today.strftime("%Y-%m-%d")
+
+        # 💳 Save payment
         c.execute("""
             INSERT INTO payments (renter_id, amount, payment_date)
             VALUES (?, ?, ?)
         """, (id, amount, payment_date))
 
-        # 🔥 update ONLY last payment date (truth source)
+        # 🔥 Update last payment date
         c.execute("""
             UPDATE renters
             SET last_payment_date=?
@@ -410,8 +473,16 @@ def pay(id):
 
         return redirect("/dashboard")
 
+    # =========================
+    # 📄 SHOW PAGE
+    # =========================
     conn.close()
-    return render_template("pay.html", renter_id=id)
+    return render_template(
+        "pay.html",
+        renter_id=id,
+        already_paid=already_paid,
+        debt=debt
+    )
 # ================= MONEY =================
 @app.route("/money")
 def money():
@@ -586,7 +657,65 @@ def change_admin_password():
         ADMIN_PASSWORD = new
         return "✅ Admin password changed successfully"
 
-    return render_template("change_admin_password.html")   
+    return render_template("change_admin_password.html") 
+#=============== TIMELINE ==============
+@app.route("/renter-timeline/<int:id>")
+def renter_timeline(id):
+    if "user" not in session:
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    # Get renter info
+    c.execute("SELECT * FROM renters WHERE id=?", (id,))
+    renter = c.fetchone()
+
+    start_date = datetime.strptime(renter[5], "%Y-%m-%d").date()
+    today = datetime.now().date()
+
+    weeks_passed = (today - start_date).days // 7
+
+    # Get all payments
+    c.execute("""
+        SELECT amount, payment_date FROM payments
+        WHERE renter_id=?
+        ORDER BY payment_date ASC
+    """, (id,))
+
+    payments = c.fetchall()
+
+    timeline = []
+
+    paid_total = 0
+
+    for week in range(weeks_passed + 1):
+        week_start = start_date + timedelta(days=week * 7)
+        week_end = week_start + timedelta(days=7)
+
+        week_paid = 0
+
+        for p in payments:
+            pay_date = datetime.strptime(p[1], "%Y-%m-%d").date()
+
+            if week_start <= pay_date < week_end:
+                week_paid += int(p[0])
+
+        if week_paid >= WEEKLY_FEE:
+            status = "PAID"
+        else:
+            status = "DEBT"
+
+        timeline.append({
+            "week": week + 1,
+            "start": week_start,
+            "status": status,
+            "paid": week_paid
+        })
+
+    conn.close()
+
+    return render_template("timeline.html", renter=renter, timeline=timeline)  
 # ================= RUN =================
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

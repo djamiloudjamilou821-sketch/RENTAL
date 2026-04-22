@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debt Timeline</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <h2>📊 Debt Timeline - {{ renter[1] }}</h2>
+
+    <a href="/renter/{{ renter[0] }}"> 
+        <button style="margin-top:10px; padding:10px; background:#2c3e50; color:white; border:none; border-radius:5px;">
+            ⬅ Back to Profile
+        </button>
+    </a>
+
+    <hr>
+
+    {% for t in timeline %}
+
+        <div style="padding:10px; margin:10px 0; border-radius:8px;
+            background:#f5f5f5;">
+
+            <p><strong>Week {{ t.week }}</strong></p>
+            <p>Start: {{ t.start }}</p>
+
+            {% if t.status == "PAID" %}
+                <p style="color:green;">✔ PAID ({{ t.paid }} CFA)</p>
+            {% else %}
+                <p style="color:red;">❌ DEBT ({{ t.paid }} CFA paid)</p>
+            {% endif %}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
