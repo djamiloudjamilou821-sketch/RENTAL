@@ -6,26 +6,24 @@
 </head>
 <body>
 <div class="profile-container">
-<form method="POST">
+    <h2>Edit Renter</h2>
+    <form method="POST">
 
-    <input name="name" value="{{ renter[1] }}" required><br><br>
+        <input name="name" value="{{ renter[1] }}" required><br><br>
 
-    <input name="phone" value="{{ renter[2] }}" required><br><br>
+        <input name="phone" value="{{ renter[2] }}" required><br><br>
 
-    <input name="address" value="{{ renter[3] }}" required><br><br>
+        <input name="address" value="{{ renter[3] }}" required><br><br>
 
-    <input name="barrow" value="{{ renter[4] }}" required><br><br>
+        <input type="password" name="password" placeholder="Admin password" required><br><br>
 
-    <br><br>
-    <button type="submit">Update</button>
-    <input type="password" name="password" placeholder="Admin password" required>
-
-    <a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
-    background:#2c3e50; color:white; padding:8px 12px;
-    border-radius:6px; text-decoration:none;">
-        ⬅ Back to Dashboard
-    </a>
-</form>
+        <button type="submit">Update</button>
+        <a href="/renters" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
+        background:#2c3e50; color:white; padding:8px 12px;
+        border-radius:6px; text-decoration:none;">
+            ⬅ Cancel
+        </a>
+    </form>
 </div>
 </body>
 </html>

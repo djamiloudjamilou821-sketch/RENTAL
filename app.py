@@ -23,7 +23,7 @@ def init_db():
             name TEXT,
             phone TEXT,
             address TEXT,
-            barrow TEXT,
+            witness TEXT,
             start_date TEXT,
             due_date TEXT,
             paid TEXT,
@@ -251,13 +251,13 @@ def edit(id):
         name = request.form["name"]
         phone = request.form["phone"]
         address = request.form["address"]
-        barrow = request.form["barrow"]
+        witness = request.form["witness"]
 
         c.execute("""
             UPDATE renters
-            SET name=?, phone=?, address=?, barrow=?
+            SET name=?, phone=?, address=?, witness=?
             WHERE id=?
-        """, (name, phone, address, barrow, id))
+        """, (name, phone, address, witness, id))
 
         conn.commit()
         conn.close()
