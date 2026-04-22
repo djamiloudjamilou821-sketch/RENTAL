@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Renters List</title>
-
     <style>
         body {
             font-family: Arial;
@@ -58,58 +57,58 @@
 </head>
 
 <body>
+    <h2>👥 Renters List</h2>
 
-<h2>👥 Renters List</h2>
+    <a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
+    background:#2c3e50; color:white; padding:8px 12px;
+    border-radius:6px; text-decoration:none;">
+        ⬅ Back to Dashboard
+    </a>
 
-<a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
-   background:#2c3e50; color:white; padding:8px 12px;
-   border-radius:6px; text-decoration:none;">
-    ⬅ Back to Dashboard
-</a>
+    <!-- ✅ ADD THIS HERE -->
+    <a href="/change-admin-password"
+    style="display:inline-block; margin-bottom:15px; margin-left:10px;
+    background:#2c3e50; color:white; padding:8px 12px;
+    border-radius:6px; text-decoration:none;">
+        🔐 Change Admin Password
+    </a>
 
-<!-- ✅ ADD THIS HERE -->
-<a href="/change-admin-password"
-   style="display:inline-block; margin-bottom:15px; margin-left:10px;
-   background:#2c3e50; color:white; padding:8px 12px;
-   border-radius:6px; text-decoration:none;">
-    🔐 Change Admin Password
-</a>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
 
-<table>
-    <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Address</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+        {% for r in renters %}
+        <tr>
+            <td>{{ loop.index }}</td>
 
-    {% for r in renters %}
-    <tr>
-        <td>{{ loop.index }}</td>
+            <td>
+                <a href="/renter/{{ r[0] }}" style="text-decoration:none; color:#1f4fff;">
+                    {{ r[1] }}
+                </a>
+            </td>
 
-        <td>
-            <a href="/renter/{{ r[0] }}" style="text-decoration:none; color:#1f4fff;">
-                {{ r[1] }}
-            </a>
-        </td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }}</td>
 
-        <td>{{ r[2] }}</td>
-        <td>{{ r[3] }}</td>
+            <td>{{ r[9] }}</td>
+          
+                    <td class="actions">
+                <a href="/renter/{{ r[0] }}" class="view">View</a>
+                <a href="/edit/{{ r[0] }}" class="edit">Edit</a>
+                <a href="/delete/{{ r[0] }}" style="background:red; color:white; padding:6px 10px; border-radius:5px; text-decoration:none;">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
 
-        <td>{{ r[9] }}</td>
-                <td class="actions">
-            <a href="/renter/{{ r[0] }}" class="view">View</a>
-            <a href="/edit/{{ r[0] }}" class="edit">Edit</a>
-            <a href="/delete/{{ r[0] }}" style="background:red; color:white; padding:6px 10px; border-radius:5px; text-decoration:none;">
-                Delete
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-
-</table>
+    </table>
 
 </body>
 </html>

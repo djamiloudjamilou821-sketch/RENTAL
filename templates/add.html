@@ -2,46 +2,87 @@
 <html>
 <head>
     <title>Add Renter</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #1f4fff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+</style>
+
 </head>
+<div class="profile-container">
+    <div style="display:flex; justify-content:center; gap:15px; background:#1f4fff; padding:10px;">
 
-<div style="display:flex; justify-content:center; gap:15px; background:#1f4fff; padding:10px;">
+        <a href="/" style="color:white; text-decoration:none; text-align:center;">
+            🏠<br><small>Dashboard</small>
+        </a>
 
-    <a href="/" style="color:white; text-decoration:none; text-align:center;">
-        🏠<br><small>Dashboard</small>
-    </a>
+        <a href="/renters" style="color:white; text-decoration:none; text-align:center;">
+            👥<br><small>Renters</small>
+        </a>
 
-    <a href="/renters" style="color:white; text-decoration:none; text-align:center;">
-        👥<br><small>Renters</small>
-    </a>
+    </div>
+    <body style="font-family:Arial; background:#f4f6f9; margin:0;">
 
+    <div style="background:#1f4fff; color:white; padding:15px; text-align:center;">
+        <h2>Add New Renter</h2>
+    </div>
+
+    <div style="padding:20px; max-width:500px; margin:auto;">
+
+        <form method="POST" style="background:white; padding:15px; border-radius:10px;">
+
+            <input name="name" placeholder="Name" style="width:100%; padding:10px; margin:5px 0;"><br>
+            <input name="phone" placeholder="Phone" style="width:100%; padding:10px; margin:5px 0;"><br>
+            <input name="address" placeholder="Address" style="width:100%; padding:10px; margin:5px 0;"><br>
+            <button type="submit" style="width:100%; padding:10px; background:#1f4fff; color:white; border:none; margin-top:10px;">
+                Save Renter
+            </button>
+
+        </form>
+
+        <br>
+        <a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
+        background:#2c3e50; color:white; padding:8px 12px;
+        border-radius:6px; text-decoration:none;">
+            ⬅ Back to Dashboard
+        </a>
+
+    </div>
 </div>
-<body style="font-family:Arial; background:#f4f6f9; margin:0;">
-
-<div style="background:#1f4fff; color:white; padding:15px; text-align:center;">
-    <h2>Add New Renter</h2>
-</div>
-
-<div style="padding:20px; max-width:500px; margin:auto;">
-
-    <form method="POST" style="background:white; padding:15px; border-radius:10px;">
-
-        <input name="name" placeholder="Name" style="width:100%; padding:10px; margin:5px 0;"><br>
-        <input name="phone" placeholder="Phone" style="width:100%; padding:10px; margin:5px 0;"><br>
-        <input name="address" placeholder="Address" style="width:100%; padding:10px; margin:5px 0;"><br>
-        <button type="submit" style="width:100%; padding:10px; background:#1f4fff; color:white; border:none; margin-top:10px;">
-            Save Renter
-        </button>
-
-    </form>
-
-    <br>
-    <a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
-    background:#2c3e50; color:white; padding:8px 12px;
-    border-radius:6px; text-decoration:none;">
-        ⬅ Back to Dashboard
-    </a>
-
-</div>
-
 </body>
 </html>

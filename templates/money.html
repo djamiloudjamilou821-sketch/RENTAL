@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Money Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
     <style>
         body {
             font-family: Arial;
@@ -56,46 +57,46 @@
     </style>
 </head>
 <body>
+<div class="profile-container">
+    <h2>💰 Money Dashboard</h2>
 
-<h2>💰 Money Dashboard</h2>
+    <div class="stats">
 
-<div class="stats">
+        <div class="card">
+            👥 Total Renters
+            <div class="big">{{ total_renters }}</div>
+        </div>
 
-    <div class="card">
-        👥 Total Renters
-        <div class="big">{{ total_renters }}</div>
+        <div class="card green">
+            ✔ Paid Renters
+            <div class="big">{{ paid_renters }}</div>
+        </div>
+
+        <div class="card red">
+            ❌ Unpaid Renters
+            <div class="big">{{ unpaid_renters }}</div>
+        </div>
+
+        <div class="card blue">
+            💵 Weekly Fee
+            <div class="big">{{ weekly_fee }} CFA</div>
+        </div>
+
+        <div class="card green">
+            💰 Collected Money
+            <div class="big">{{ collected_money }} CFA</div>
+        </div>
+
+        <div class="card orange">
+            📊 Expected Money
+            <div class="big">{{ expected_money }} CFA</div>
+        </div>
+
     </div>
 
-    <div class="card green">
-        ✔ Paid Renters
-        <div class="big">{{ paid_renters }}</div>
+    <div class="back">
+        <a href="/dashboard">⬅ Back to Dashboard</a>
     </div>
-
-    <div class="card red">
-        ❌ Unpaid Renters
-        <div class="big">{{ unpaid_renters }}</div>
-    </div>
-
-    <div class="card blue">
-        💵 Weekly Fee
-        <div class="big">{{ weekly_fee }} CFA</div>
-    </div>
-
-    <div class="card green">
-        💰 Collected Money
-        <div class="big">{{ collected_money }} CFA</div>
-    </div>
-
-    <div class="card orange">
-        📊 Expected Money
-        <div class="big">{{ expected_money }} CFA</div>
-    </div>
-
 </div>
-
-<div class="back">
-    <a href="/dashboard">⬅ Back to Dashboard</a>
-</div>
-
 </body>
 </html>
