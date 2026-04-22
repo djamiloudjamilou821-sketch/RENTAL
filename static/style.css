@@ -179,3 +179,87 @@ body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* HEADER */
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h2 {
+    margin: 0;
+}
+
+.phone, .address {
+    color: gray;
+    margin: 3px 0;
+}
+
+/* INFO BOX */
+.info-box {
+    background: #f5f7ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* BUTTON */
+.pay-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background: #1e4ed8;
+}
+
+/* SUMMARY */
+.summary {
+    margin-top: 20px;
+}
+
+.none {
+    color: red;
+}
+
+/* TABLE */
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.payment-table th {
+    background: #2563eb;
+    color: white;
+    padding: 10px;
+}
+
+.payment-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.amount {
+    color: green;
+    font-weight: bold;
+}
+
+/* NO DATA */
+.no-data {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* BACK */
+.back {
+    margin-top: 20px;
+    text-align: center;
+}
