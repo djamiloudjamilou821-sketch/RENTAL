@@ -3,80 +3,79 @@
 <head>
     <title>Renter Profile</title>
     <link rel="stylesheet" href="/static/style.css">
-<style>
-
-
-</style>
-
 </head>
 <body>
+
 <div class="profile-container">
-    <h2>{{ renter[1] }}</h2>
 
-    <p>📞 {{ renter[2] }}</p>
-    <p>📍 {{ renter[3] }}</p>
-    <p><strong>📅 Start Date:</strong> {{ renter[5] }}</p>
-    <hr>
-    <p><strong>⏳ Next Due:</strong> {{ renter[6] }}</p>
+    <!-- HEADER -->
+    <div class="profile-header">
+        <h2>{{ renter[1] }}</h2>
+        <p class="phone">📞 {{ renter[2] }}</p>
+        <p class="address">📍 {{ renter[3] }}</p>
+    </div>
 
-    <h3>📊 Summary</h3>
-    <hr>
+    <!-- RENT INFO -->
+    <div class="info-box">
+        <p><strong>📅 Start Date:</strong> {{ renter[5] }}</p>
+        <p><strong>⏳ Next Due:</strong> {{ renter[6] }}</p>
+    </div>
 
-    <a href="/pay/{{ renter[0] }}">
-        <button style="padding:10px; background:green; color:white; border:none; border-radius:5px;">
-            💳 Make Payment
-        </button>
-    </a>
+    <!-- ACTION BUTTON -->
+    <div class="action">
+        <a href="/pay/{{ renter[0] }}">
+            <button class="pay-btn">💳 Make Payment</button>
+        </a>
+    </div>
 
-    <p><strong>Total Paid:</strong> {{ total_paid }} CFA</p>
-    <p><strong>Number of Payments:</strong> {{ total_payments }}</p>
-    <p><strong>Last Payment:</strong>
-        {% if last_payment %}
-            {{ last_payment }}
+    <!-- SUMMARY -->
+    <div class="summary">
+        <h3>📊 Summary</h3>
+        <p><strong>Total Paid:</strong> {{ total_paid }} CFA</p>
+        <p><strong>Payments:</strong> {{ total_payments }}</p>
+        <p><strong>Last Payment:</strong>
+            {% if last_payment %}
+                {{ last_payment }}
+            {% else %}
+                <span class="none">None</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- HISTORY TABLE -->
+    <div class="history">
+        <h3>💳 Payment History</h3>
+
+        {% if payments and payments|length > 0 %}
+        <table class="payment-table">
+            <tr>
+                <th>#</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+
+            {% for p in payments %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td class="amount">{{ p[0] }} CFA</td>
+                <td>{{ p[1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
         {% else %}
-            None
+            <p class="no-data">No payment history found</p>
         {% endif %}
-    </p>
+    </div>
 
-    <hr>
-
-    <h3>💳 Payment History</h3>
-
-    {% if payments and payments|length > 0 %}
-    <table border="1" cellpadding="8" cellspacing="0">
-        <tr>
-            <th>#</th>
-            <th>Amount</th>
-            <th>Date</th>
-        </tr>
-
-        {% for p in payments %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ p[0] }} CFA</td>
-            <td>{{ p[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    {% else %}
-    <p style="color:red; font-weight:bold;">No payment history found</p>
-    {% endif %}
-
-    <hr>
-
+    <!-- BACK -->
     <a href="/dashboard" style="display:inline-block; margin-bottom:10px;  margin-left:10px;
-    background:#2c3e50; color:white; padding:8px 12px;
-    border-radius:6px; text-decoration:none;">
-        ⬅ Back to Dashboard
+        background:#2c3e50; color:white; padding:8px 12px;
+        border-radius:6px; text-decoration:none;">
+            ⬅ Back to Dashboard
     </a>
 
-    <a href="/renter-timeline/{{ renter[0] }}">
-        <button style="margin-top:10px; padding:10px; background:#2c3e50; color:white; border:none; border-radius:5px;">
-            📊 View Debt Timeline
-        </button>
-    </a>
+
 </div>
-  
+
 </body>
 </html>
