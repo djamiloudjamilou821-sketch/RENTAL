@@ -199,28 +199,37 @@ def add():
         return redirect("/login")
 
     if request.method == "POST":
+
         name = request.form["name"]
         phone = request.form["phone"]
         address = request.form["address"]
-        barrow = request.form["barrow"]
 
-        # ✅ define start here
-        start = datetime.now()
-        due = start + timedelta(days=7)
+        today = datetime.now().date()
+
+        # 📅 weekly system start
+        start_date = today
+        due_date = today + timedelta(days=7)
 
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
 
         c.execute("""
-            INSERT INTO renters (name, phone, address, barrow, start_date, due_date, paid, last_payment_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO renters (
+                name,
+                phone,
+                address,
+                start_date,
+                due_date,
+                paid,
+                last_payment_date
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             name,
             phone,
             address,
-            barrow,
-            start.strftime("%Y-%m-%d"),
-            due.strftime("%Y-%m-%d"),
+            start_date.strftime("%Y-%m-%d"),
+            due_date.strftime("%Y-%m-%d"),
             None,
             None
         ))
